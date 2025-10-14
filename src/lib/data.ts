@@ -58,6 +58,7 @@ export async function getArticles(options?: { status?: Article['status']; search
   if (options?.searchTerm) {
     params.set('q', options.searchTerm);
   }
+  // The 'all' category should not be passed to the API
   if (options?.category && options.category.toLowerCase() !== 'all') {
     params.set('category', options.category.toLowerCase());
   }
@@ -78,12 +79,6 @@ export async function getArticles(options?: { status?: Article['status']; search
 
     if (data.status === 'ok') {
       articles = data.articles.map(transformArticle).filter(a => a.title !== '[Removed]');
-      
-      // The API's category filter can be broad, so we can do an additional client-side filter if needed
-      if (options?.category && options.category.toLowerCase() !== 'all') {
-        return articles.filter(a => a.category.toLowerCase().includes(options.category!.toLowerCase()));
-      }
-      
       return articles;
     } else {
       console.error('NewsAPI returned status:', data.status);

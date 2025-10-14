@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { addArticle, updateArticleStatus } from './data';
+// import { addArticle, updateArticleStatus } from './data';
 import { revalidatePath } from 'next/cache';
 
 const ArticleSchema = z.object({
@@ -27,42 +27,14 @@ export async function submitNewsArticle(
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
-  const validatedFields = ArticleSchema.safeParse({
-    title: formData.get('title'),
-    content: formData.get('content'),
-    author: formData.get('author'),
-    location: formData.get('location'),
-    category: formData.get('category'),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      message: 'Failed to submit article. Please check the errors below.',
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
-
-  try {
-    await addArticle(validatedFields.data);
-    revalidatePath('/');
-    revalidatePath('/admin');
-    return { message: 'success' };
-  } catch (error) {
-    return { message: 'An unexpected error occurred.' };
-  }
+  console.warn("submitNewsArticle is disabled when using live NewsAPI data.");
+  return { message: 'Submission is disabled.' };
 }
 
 export async function approveArticle(formData: FormData) {
-  const id = formData.get('id') as string;
-  if (!id) return;
-  await updateArticleStatus(id, 'published');
-  revalidatePath('/admin');
-  revalidatePath('/');
+  console.warn("approveArticle is disabled when using live NewsAPI data.");
 }
 
 export async function rejectArticle(formData: FormData) {
-    const id = formData.get('id') as string;
-    if (!id) return;
-    await updateArticleStatus(id, 'rejected');
-    revalidatePath('/admin');
+    console.warn("rejectArticle is disabled when using live NewsAPI data.");
 }

@@ -10,8 +10,8 @@ export default function SiteHeader() {
 
   const navItems = [
     { href: '/', label: 'Home' },
-    { href: '/submit-news', label: 'Submit News' },
-    { href: '/admin', label: 'Admin' },
+    // { href: '/submit-news', label: 'Submit News' },
+    // { href: '/admin', label: 'Admin' },
   ];
 
   return (

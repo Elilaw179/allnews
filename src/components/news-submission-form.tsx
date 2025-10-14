@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect, useOptimistic } from 'react';
+import { useActionState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { submitNewsArticle, type FormState } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
 
 const initialState: FormState = {
   message: '',
@@ -17,7 +19,7 @@ const initialState: FormState = {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full">
+    <Button type="submit" disabled={true} className="w-full">
       {pending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...
@@ -53,10 +55,18 @@ export default function NewsSubmissionForm() {
   const formKey = state.message === 'success' ? Date.now() : 'static-key';
 
   return (
-    <form key={formKey} action={formAction} className="space-y-6">
+    <>
+    <Alert>
+      <Terminal className="h-4 w-4" />
+      <AlertTitle>Feature Disabled</AlertTitle>
+      <AlertDescription>
+        News submission is disabled now that the app is connected to a live news feed.
+      </AlertDescription>
+    </Alert>
+    <form key={formKey} action={formAction} className="space-y-6 mt-6 opacity-50 pointer-events-none">
       <div className="space-y-2">
         <Label htmlFor="title">Article Title</Label>
-        <Input id="title" name="title" placeholder="e.g., A New Discovery in Quantum Physics" required />
+        <Input id="title" name="title" placeholder="e.g., A New Discovery in Quantum Physics" required disabled />
         {state.errors?.title && (
           <p className="text-sm text-destructive">{state.errors.title.join(', ')}</p>
         )}
@@ -70,6 +80,7 @@ export default function NewsSubmissionForm() {
           placeholder="Write your full article here..."
           required
           rows={10}
+          disabled
         />
         {state.errors?.content && (
           <p className="text-sm text-destructive">{state.errors.content.join(', ')}</p>
@@ -79,14 +90,14 @@ export default function NewsSubmissionForm() {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div className="space-y-2">
             <Label htmlFor="author">Author Name</Label>
-            <Input id="author" name="author" placeholder="Your Name" required />
+            <Input id="author" name="author" placeholder="Your Name" required disabled />
             {state.errors?.author && (
             <p className="text-sm text-destructive">{state.errors.author.join(', ')}</p>
             )}
         </div>
         <div className="space-y-2">
             <Label htmlFor="location">Location</Label>
-            <Input id="location" name="location" placeholder="e.g., New York, USA" required />
+            <Input id="location" name="location" placeholder="e.g., New York, USA" required disabled />
             {state.errors?.location && (
             <p className="text-sm text-destructive">{state.errors.location.join(', ')}</p>
             )}
@@ -95,7 +106,7 @@ export default function NewsSubmissionForm() {
       
        <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-            <Input id="category" name="category" placeholder="e.g., Technology" required />
+            <Input id="category" name="category" placeholder="e.g., Technology" required disabled />
             {state.errors?.category && (
             <p className="text-sm text-destructive">{state.errors.category.join(', ')}</p>
             )}
@@ -103,5 +114,6 @@ export default function NewsSubmissionForm() {
 
       <SubmitButton />
     </form>
+    </>
   );
 }

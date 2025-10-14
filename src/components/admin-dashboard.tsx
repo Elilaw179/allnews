@@ -19,9 +19,10 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { approveArticle, rejectArticle } from '@/lib/actions';
-import { Check, X, Loader2 } from 'lucide-react';
+import { Check, X, Loader2, Terminal } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 import { format } from 'date-fns';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 function ActionButton({ variant }: { variant: 'approve' | 'reject' }) {
     const { pending } = useFormStatus();
@@ -33,7 +34,7 @@ function ActionButton({ variant }: { variant: 'approve' | 'reject' }) {
             size="icon"
             variant={isApprove ? 'ghost' : 'ghost'}
             className={isApprove ? 'hover:bg-green-100 dark:hover:bg-green-900 text-green-600' : 'hover:bg-red-100 dark:hover:bg-red-900 text-red-600'}
-            disabled={pending}
+            disabled={true}
             aria-label={isApprove ? 'Approve' : 'Reject'}
         >
             {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : isApprove ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
@@ -103,18 +104,27 @@ export default function AdminDashboard({ pendingArticles, rejectedArticles }: { 
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="pending">
-          <TabsList>
-            <TabsTrigger value="pending">Pending Review ({pendingArticles.length})</TabsTrigger>
-            <TabsTrigger value="rejected">Rejected ({rejectedArticles.length})</TabsTrigger>
-          </TabsList>
-          <TabsContent value="pending">
-            <ArticleTable articles={pendingArticles} />
-          </TabsContent>
-          <TabsContent value="rejected">
-            <ArticleTable articles={rejectedArticles} />
-          </TabsContent>
-        </Tabs>
+        <Alert className="mb-4">
+          <Terminal className="h-4 w-4" />
+          <AlertTitle>Feature Disabled</AlertTitle>
+          <AlertDescription>
+            The admin dashboard is disabled now that the app is connected to a live news feed.
+          </AlertDescription>
+        </Alert>
+        <div className="opacity-50 pointer-events-none">
+          <Tabs defaultValue="pending">
+            <TabsList>
+              <TabsTrigger value="pending">Pending Review ({pendingArticles.length})</TabsTrigger>
+              <TabsTrigger value="rejected">Rejected ({rejectedArticles.length})</TabsTrigger>
+            </TabsList>
+            <TabsContent value="pending">
+              <ArticleTable articles={pendingArticles} />
+            </TabsContent>
+            <TabsContent value="rejected">
+              <ArticleTable articles={rejectedArticles} />
+            </TabsContent>
+          </Tabs>
+        </div>
       </CardContent>
     </Card>
   );

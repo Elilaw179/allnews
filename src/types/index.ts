@@ -11,4 +11,5 @@ export type Article = {
   location: string;
   date: string; // ISO 8601 format
   status: 'published' | 'pending' | 'rejected';
+  url: string; // URL to the original article
 };

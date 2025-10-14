@@ -21,11 +21,16 @@ function transformArticle(newsApiArticle: any, index: number): Article {
   const publishedTime = new Date(newsApiArticle.publishedAt).getTime();
   const slug = `${slugTitle}-${publishedTime}`;
 
+  const content = (newsApiArticle.content || newsApiArticle.description || 'No Content');
+  // NewsAPI often adds a truncation marker. Let's try to provide a cleaner reading experience.
+  const cleanedContent = content.replace(/\[\+\d+ chars\]$/, '');
+
+
   return {
     id: slug,
     slug: slug,
     title: newsApiArticle.title || 'No Title',
-    content: newsApiArticle.content || newsApiArticle.description || 'No Content',
+    content: cleanedContent,
     excerpt: newsApiArticle.description || 'No Excerpt',
     imageUrl: newsApiArticle.urlToImage || placeholder.imageUrl,
     imageHint: placeholder.imageHint,
@@ -34,6 +39,7 @@ function transformArticle(newsApiArticle: any, index: number): Article {
     location: 'Global', // NewsAPI does not provide location consistently
     date: newsApiArticle.publishedAt,
     status: 'published',
+    url: newsApiArticle.url
   };
 }
 
@@ -58,10 +64,18 @@ export async function getArticles(options?: { status?: Article['status']; search
   if (options?.searchTerm) {
     params.set('q', options.searchTerm);
   }
-  // The 'all' category should not be passed to the API
-  if (options?.category && options.category.toLowerCase() !== 'all') {
-    params.set('category', options.category.toLowerCase());
+
+  // API requires 'general' for broad searches, not 'all'
+  const category = options?.category?.toLowerCase();
+  if (category && category !== 'all') {
+    params.set('category', category);
+  } else {
+    // We can default to a broad category if none is specified and it's not a search
+    if(!options?.searchTerm) {
+      params.set('category', 'general');
+    }
   }
+
 
   try {
     const response = await fetch(`${NEWS_API_URL}?${params.toString()}`, {
@@ -78,10 +92,10 @@ export async function getArticles(options?: { status?: Article['status']; search
     const data = await response.json();
 
     if (data.status === 'ok') {
-      articles = data.articles.map(transformArticle).filter(a => a.title !== '[Removed]');
+      articles = data.articles.map(transformArticle).filter(a => a.title !== '[Removed]' && a.url);
       return articles;
     } else {
-      console.error('NewsAPI returned status:', data.status);
+      console.error('NewsAPI returned status:', data.status, data.message);
       return [];
     }
   } catch (error) {
@@ -115,6 +129,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
         location: "Unknown",
         date: new Date().toISOString(),
         status: 'published',
+        url: '/',
     }
   }
 
@@ -129,7 +144,7 @@ export async function getCategories(): Promise<string[]> {
 
 // The following functions are no longer needed as we are fetching live data.
 // They are kept here to avoid breaking other parts of the app that might still call them.
-export async function addArticle(articleData: Omit<Article, 'id' | 'status' | 'date' | 'slug' | 'excerpt' | 'imageUrl' | 'imageHint'>): Promise<Article> {
+export async function addArticle(articleData: Omit<Article, 'id' | 'status' | 'date' | 'slug' | 'excerpt' | 'imageUrl' | 'imageHint' | 'url'>): Promise<Article> {
   console.warn("addArticle is disabled when using live NewsAPI data.");
   // @ts-ignore
   return Promise.resolve({});

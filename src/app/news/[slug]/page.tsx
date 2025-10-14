@@ -1,9 +1,11 @@
 import { getArticleBySlug } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Calendar, User, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import { Calendar, User, MapPin, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import SummarizeTool from '@/components/summarize-tool';
 
@@ -57,8 +59,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           />
         </div>
         
-        <div className="mb-8">
+        <div className="mb-8 flex flex-wrap gap-4">
             <SummarizeTool articleContent={article.content} />
+             <Button asChild variant="outline">
+              <Link href={article.url} target="_blank" rel="noopener noreferrer">
+                Read Full Story
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
         </div>
 
         <Separator className="my-8" />
@@ -68,6 +76,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <p key={index}>{paragraph}</p>
             ))}
         </div>
+         <Separator className="my-8" />
+         <Button asChild>
+            <Link href={article.url} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+                Read the full article at the source
+                <ExternalLink className="ml-2 h-4 w-4" />
+            </Link>
+        </Button>
       </article>
     </div>
   );

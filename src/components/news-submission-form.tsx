@@ -1,7 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect } from 'react';
+import { useActionState, useEffect, useOptimistic } from 'react';
+import { useFormStatus } from 'react-dom';
 import { submitNewsArticle, type FormState } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ function SubmitButton() {
 }
 
 export default function NewsSubmissionForm() {
-  const [state, formAction] = useFormState(submitNewsArticle, initialState);
+  const [state, formAction] = useActionState(submitNewsArticle, initialState);
   const { toast } = useToast();
 
   useEffect(() => {

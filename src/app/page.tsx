@@ -35,7 +35,7 @@ export default async function Home({ searchParams }: HomeProps) {
       </header>
 
       <div className="mb-8 flex flex-col gap-4 md:flex-row">
-        <form className="relative flex-1">
+        <form action="/" method="GET" className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
             type="search"
@@ -46,7 +46,7 @@ export default async function Home({ searchParams }: HomeProps) {
           />
         </form>
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <Button asChild variant={!selectedCategory ? 'default' : 'outline'}>
+          <Button asChild variant={!selectedCategory && !searchTerm ? 'default' : 'outline'}>
             <Link href="/">All</Link>
           </Button>
           {categories.map((category) => (
@@ -54,6 +54,7 @@ export default async function Home({ searchParams }: HomeProps) {
               key={category}
               asChild
               variant={selectedCategory === category ? 'default' : 'outline'}
+              disabled={!!searchTerm}
             >
               <Link href={`/?category=${encodeURIComponent(category)}`}>
                 {category}

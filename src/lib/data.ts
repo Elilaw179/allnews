@@ -7,6 +7,7 @@ import { PlaceHolderImages } from './placeholder-images';
 // environment variable.
 const NEWS_API_KEY = process.env.NEWS_API_KEY;
 const NEWS_API_URL = 'https://newsapi.org/v2/top-headlines';
+const EVERYTHING_NEWS_API_URL = 'https://newsapi.org/v2/everything';
 
 // In-memory store for articles fetched from the API to allow fetching by slug
 let articles: Article[] = [];
@@ -54,31 +55,29 @@ export async function getArticles(options?: { status?: Article['status']; search
     return [];
   }
 
+  let apiUrl = NEWS_API_URL;
   const params = new URLSearchParams({
-    country: 'us',
     language: 'en',
     pageSize: '40',
     apiKey: NEWS_API_KEY,
   });
 
   if (options?.searchTerm) {
+    apiUrl = EVERYTHING_NEWS_API_URL;
     params.set('q', options.searchTerm);
-  }
-
-  // API requires 'general' for broad searches, not 'all'
-  const category = options?.category?.toLowerCase();
-  if (category && category !== 'all') {
-    params.set('category', category);
+    params.set('sortBy', 'relevancy');
   } else {
-    // We can default to a broad category if none is specified and it's not a search
-    if(!options?.searchTerm) {
+    params.set('country', 'us');
+    const category = options?.category?.toLowerCase();
+    if (category && category !== 'all') {
+      params.set('category', category);
+    } else {
       params.set('category', 'general');
     }
   }
 
-
   try {
-    const response = await fetch(`${NEWS_API_URL}?${params.toString()}`, {
+    const response = await fetch(`${apiUrl}?${params.toString()}`, {
         // Revalidate data every hour
         next: { revalidate: 3600 }
     });
@@ -92,7 +91,7 @@ export async function getArticles(options?: { status?: Article['status']; search
     const data = await response.json();
 
     if (data.status === 'ok') {
-      articles = data.articles.map(transformArticle).filter(a => a.title !== '[Removed]' && a.url);
+      articles = data.articles.map(transformArticle).filter(a => a.title !== '[Removed]' && a.url && a.imageUrl);
       return articles;
     } else {
       console.error('NewsAPI returned status:', data.status, data.message);

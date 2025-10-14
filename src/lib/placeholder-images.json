@@ -1,3 +1,64 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "1",
+      "description": "A bustling cityscape with modern architecture and traffic.",
+      "imageUrl": "https://picsum.photos/seed/1/600/400",
+      "imageHint": "cityscape"
+    },
+    {
+      "id": "2",
+      "description": "A person holding a smartphone with a glowing screen displaying charts.",
+      "imageUrl": "https://picsum.photos/seed/2/600/400",
+      "imageHint": "technology business"
+    },
+    {
+      "id": "3",
+      "description": "A satellite view of Earth, showing continents and weather patterns.",
+      "imageUrl": "https://picsum.photos/seed/3/600/400",
+      "imageHint": "earth space"
+    },
+    {
+      "id": "4",
+      "description": "A group of people at a conference, engaged in a discussion.",
+      "imageUrl": "https://picsum.photos/seed/4/600/400",
+      "imageHint": "conference politics"
+    },
+    {
+      "id": "5",
+      "description": "A close-up of a stock market ticker board with glowing numbers.",
+      "imageUrl": "https://picsum.photos/seed/5/600/400",
+      "imageHint": "stock market"
+    },
+    {
+      "id": "6",
+      "description": "Athletes competing in a stadium during a sunny day.",
+      "imageUrl": "https://picsum.photos/seed/6/600/400",
+      "imageHint": "sports stadium"
+    },
+    {
+      "id": "7",
+      "description": "A scientist looking through a microscope in a modern laboratory.",
+      "imageUrl": "https://picsum.photos/seed/7/600/400",
+      "imageHint": "science laboratory"
+    },
+    {
+      "id": "8",
+      "description": "A picturesque landscape with mountains and a serene lake.",
+      "imageUrl": "https://picsum.photos/seed/8/600/400",
+      "imageHint": "nature landscape"
+    },
+    {
+      "id": "9",
+      "description": "A person writing in a notebook on a wooden desk with a laptop and coffee.",
+      "imageUrl": "https://picsum.photos/seed/9/600/400",
+      "imageHint": "writing journalism"
+    },
+    {
+      "id": "10",
+      "description": "A gavel and law books on a wooden surface.",
+      "imageUrl": "https://picsum.photos/seed/10/600/400",
+      "imageHint": "law justice"
+    }
+  ]
 }

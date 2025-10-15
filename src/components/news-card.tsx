@@ -14,12 +14,16 @@ import { format } from 'date-fns';
 
 type NewsCardProps = {
   article: Article;
+  animationDelay: number;
 };
 
-export default function NewsCard({ article }: NewsCardProps) {
+export default function NewsCard({ article, animationDelay }: NewsCardProps) {
   return (
     <Link href={`/news/${article.slug}`} className="group block">
-      <Card className="flex h-full flex-col overflow-hidden transition-all group-hover:shadow-lg group-hover:-translate-y-1">
+      <Card 
+        className="flex h-full flex-col overflow-hidden transition-all group-hover:shadow-lg group-hover:-translate-y-1 animate-in fade-in-0 slide-in-from-bottom-5"
+        style={{ animationFillMode: 'backwards', animationDelay: `${animationDelay}ms` }}
+      >
         <CardHeader className="p-0">
           <div className="relative h-48 w-full">
             <Image

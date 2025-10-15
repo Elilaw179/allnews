@@ -19,7 +19,7 @@ function transformArticle(newsApiArticle: any, index: number): Article {
   const slugTitle = (newsApiArticle.title?.toLowerCase() || 'untitled')
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '');
-  const publishedTime = new Date(newsApiArticle.publishedAt).getTime();
+  const publishedTime = new Date(newsApiApinewsApiArticle.publishedAt).getTime();
   const slug = `${slugTitle}-${publishedTime}`;
 
   const content = (newsApiArticle.content || newsApiArticle.description || 'No Content');
@@ -69,7 +69,7 @@ export async function getArticles(options?: { status?: Article['status']; search
   } else {
     params.set('country', 'us');
     const category = options?.category?.toLowerCase();
-    if (category && category !== 'all') {
+    if (category && category !== 'all' && category !== 'general') {
       params.set('category', category);
     } else {
       params.set('category', 'general');
@@ -78,8 +78,8 @@ export async function getArticles(options?: { status?: Article['status']; search
 
   try {
     const response = await fetch(`${apiUrl}?${params.toString()}`, {
-        // Revalidate data every hour
-        next: { revalidate: 3600 }
+        // Revalidate data every 15 minutes
+        next: { revalidate: 900 }
     });
     
     if (!response.ok) {

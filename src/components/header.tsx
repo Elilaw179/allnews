@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from './theme-toggle';
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -41,7 +42,9 @@ export default function SiteHeader() {
             ))}
           </nav>
         </div>
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
-}

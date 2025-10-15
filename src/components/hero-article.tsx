@@ -10,7 +10,7 @@ type HeroArticleProps = {
 
 export default function HeroArticle({ article }: HeroArticleProps) {
   return (
-    <section className="relative h-[50vh] min-h-[400px] w-full text-white">
+    <div className="relative h-full w-full text-white">
       <div className="absolute inset-0 z-0">
         <Image
           src={article.imageUrl}
@@ -36,6 +36,6 @@ export default function HeroArticle({ article }: HeroArticleProps) {
           </Button>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
-import HeroArticle from '@/components/hero-article';
+import HeroCarousel from '@/components/hero-carousel';
 
 type HomeProps = {
   searchParams?: {
@@ -31,18 +31,18 @@ export default async function Home({ searchParams }: HomeProps) {
   });
   const categories = await getCategories();
 
-  const heroArticle = allArticles.length > 0 ? allArticles[0] : null;
-  const articles = allArticles.length > 1 ? allArticles.slice(1) : [];
+  const heroArticles = allArticles.length > 5 ? allArticles.slice(0, 5) : allArticles;
+  const articles = allArticles.length > 5 ? allArticles.slice(5) : (heroArticles.length > 0 && allArticles.length <=5 ? [] : allArticles);
 
 
   return (
     <div>
-      {heroArticle && !searchTerm && !selectedCategory && (
-        <HeroArticle article={heroArticle} />
+      {heroArticles.length > 0 && !searchTerm && !selectedCategory && (
+        <HeroCarousel articles={heroArticles} />
       )}
 
       <div className="container mx-auto px-4 py-8">
-        {!heroArticle && (
+        {heroArticles.length === 0 && (
           <header className="mb-8 text-center">
             <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-5xl md:text-6xl">
               Global News Hub
@@ -89,7 +89,7 @@ export default async function Home({ searchParams }: HomeProps) {
               <NewsCard key={article.id} article={article} animationDelay={index * 50} />
             ))}
           </div>
-        ) : heroArticle ? null : ( // Don't show "No Articles" if a hero article is present
+        ) : heroArticles.length > 0 ? null : ( 
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
             <h2 className="text-2xl font-headline font-semibold">No Articles Found</h2>
             <p className="mt-2 text-muted-foreground">

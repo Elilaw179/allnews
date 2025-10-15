@@ -67,11 +67,13 @@ export async function getArticles(options?: { status?: Article['status']; search
     params.set('q', options.searchTerm);
     params.set('sortBy', 'relevancy');
   } else {
-    params.set('country', 'us');
+    // No country parameter to get global news
     const category = options?.category?.toLowerCase();
     if (category && category !== 'all' && category !== 'general') {
       params.set('category', category);
     } else {
+       // Default to general category if no specific one is provided
+       // This gives a good mix of global top headlines.
       params.set('category', 'general');
     }
   }

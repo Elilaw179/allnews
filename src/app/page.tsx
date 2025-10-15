@@ -1,4 +1,5 @@
 import { getArticles, getCategories } from '@/lib/data';
+import { refineSearchQuery } from '@/ai/flows/refine-search-query';
 import NewsCard from '@/components/news-card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,8 +14,14 @@ type HomeProps = {
 };
 
 export default async function Home({ searchParams }: HomeProps) {
-  const searchTerm = searchParams?.search || '';
+  let searchTerm = searchParams?.search || '';
   const selectedCategory = searchParams?.category || '';
+
+  // If there's a search term, refine it using the AI flow
+  if (searchTerm) {
+    const refinedResult = await refineSearchQuery({ query: searchTerm });
+    searchTerm = refinedResult.refinedQuery;
+  }
 
   const articles = await getArticles({
     status: 'published',
@@ -42,7 +49,7 @@ export default async function Home({ searchParams }: HomeProps) {
             name="search"
             placeholder="Search articles by keyword..."
             className="w-full pl-10"
-            defaultValue={searchTerm}
+            defaultValue={searchParams?.search || ''}
           />
         </form>
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -74,7 +81,7 @@ export default async function Home({ searchParams }: HomeProps) {
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
           <h2 className="text-2xl font-headline font-semibold">No Articles Found</h2>
           <p className="mt-2 text-muted-foreground">
-            Try adjusting your search or filter.
+            Try adjusting your search or filter. We've refined your search using AI, but sometimes the well is dry!
           </p>
           <Button asChild className="mt-4 bg-accent text-accent-foreground hover:bg-accent/90">
             <Link href="/">Clear Filters</Link>

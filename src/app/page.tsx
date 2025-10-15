@@ -41,7 +41,7 @@ export default async function Home({ searchParams }: HomeProps) {
         <HeroCarousel articles={heroArticles} />
       )}
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 md:py-8">
         {heroArticles.length === 0 && (
           <header className="mb-8 text-center">
             <h1 className="text-4xl font-headline font-bold tracking-tighter sm:text-5xl md:text-6xl">

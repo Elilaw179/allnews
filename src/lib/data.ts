@@ -19,7 +19,7 @@ function transformArticle(newsApiArticle: any, index: number): Article {
   const slugTitle = (newsApiArticle.title?.toLowerCase() || 'untitled')
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '');
-  const publishedTime = new Date(newsApiApinewsApiArticle.publishedAt).getTime();
+  const publishedTime = new Date(newsApiArticle.publishedAt).getTime();
   const slug = `${slugTitle}-${publishedTime}`;
 
   const content = (newsApiArticle.content || newsApiArticle.description || 'No Content');

@@ -48,3 +48,4 @@ export default function SiteHeader() {
       </div>
     </header>
   );
+}
